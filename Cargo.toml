@@ -1,0 +1,41 @@
+[package]
+name = "workout"
+version = "0.1.0"
+edition = "2021"
+resolver = "2"
+
+[[bin]]
+name = "workout_hydrate"
+required-features = ["hydration"]
+
+[[bin]]
+name = "workout_server"
+required-features = ["ssr"]
+
+[lib]
+crate-type = ["lib", "cdylib"]
+
+[dependencies]
+bytes = "1.4.0"
+futures = "0.3.28"
+yew = { version = "0.20.0" }
+
+[target.'cfg(not(target_arch = "wasm32"))'.dependencies]
+tokio = { version = "1.26.0", features = ["full"] }
+clap = { version = "4.2.4", features = ["derive"] }
+warp = "0.3.4"
+
+[profile.dev]
+opt-level = 3
+debug = true
+debug-assertions = false
+overflow-checks = false
+lto = false
+panic = 'unwind'
+incremental = false
+codegen-units = 16
+rpath = false
+
+[features]
+hydration = ["yew/hydration"]
+ssr = ["yew/ssr"]
